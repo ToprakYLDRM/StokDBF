@@ -1,0 +1,23 @@
+﻿@model Stokdbf.data.Models.Product
+
+@{
+    ViewData["Title"] = "Ürün Sil";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger mb-3">Silmek istediğinize emin misiniz?</h2>
+
+    <div class="alert alert-warning">
+        <h5>@Model.Name</h5>
+        <p><strong>Stok:</strong> @Model.Quantity</p>
+        <p><strong>Fiyat:</strong> @Model.UnitPrice</p>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Sil</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </div>
+    </form>
+</div>

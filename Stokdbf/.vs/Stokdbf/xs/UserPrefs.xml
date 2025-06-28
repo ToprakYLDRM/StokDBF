@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{1484E36F-555C-4E91-90C2-74163EB03CAD}|https">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.Stokdbf.web PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Stokdbf.web/Views/Products/Index.cshtml">
+    <Files>
+      <File FileName="Stokdbf.web/Controllers/StockMovementsController.cs" Line="24" Column="36" />
+      <File FileName="Stokdbf.web/Views/StockMovements/Index.cshtml" Line="11" Column="25" />
+      <File FileName="Stokdbf.web/Views/StockMovements/Create.cshtml" Line="42" Column="2" />
+      <File FileName="Stokdbf.web/Controllers/ProductsController.cs" Line="51" Column="10" />
+      <File FileName="Stokdbf.web/Views/Products/Index.cshtml" Line="16" Column="14" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Stokdbf" expanded="True" selected="True">
+            <Node name="Stokdbf.data" expanded="True">
+              <Node name="Models" expanded="True" />
+            </Node>
+            <Node name="Stokdbf.web" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

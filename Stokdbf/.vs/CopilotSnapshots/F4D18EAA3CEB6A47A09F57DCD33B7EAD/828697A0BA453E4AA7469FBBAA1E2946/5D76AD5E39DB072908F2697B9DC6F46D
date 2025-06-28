@@ -1,0 +1,147 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Stokdbf.data.Models;
+
+// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Stokdbf.web.Controllers
+{
+    public class ProductsController : Controller
+    {
+        private readonly StokTakipDbContext _context;
+
+        public ProductsController(StokTakipDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index(string search, int? categoryId, string sortBy)
+        {
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+            ViewBag.CurrentSearch = search;
+            ViewBag.CurrentCategory = categoryId;
+            ViewBag.CurrentSort = sortBy;
+
+            var products = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+                products = products.Where(p => p.Name.Contains(search));
+
+            if (categoryId.HasValue)
+                products = products.Where(p => p.CategoryId == categoryId.Value);
+
+            // Sıralama
+            products = sortBy switch
+            {
+                "price" => products.OrderBy(p => p.UnitPrice),
+                "stock" => products.OrderBy(p => p.Quantity),
+                "name" => products.OrderBy(p => p.Name),
+                _ => products.OrderBy(p => p.Id)
+            };
+
+            return View(await products.ToListAsync());
+        }
+
+        public IActionResult Create()
+        {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Suppliers = _context.Suppliers.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Suppliers = _context.Suppliers.ToList();
+            return View(product);
+        }
+        // GET: Products/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Suppliers = _context.Suppliers.ToList();
+            return View(product);
+        }
+
+        // POST: Products/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Product product)
+        {
+            if (id != product.Id) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Products.Any(e => e.Id == product.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
+            }
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Suppliers = _context.Suppliers.ToList();
+            return View(product);
+        }
+        // GET: Products/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (product == null) return NotFound();
+
+            return View(product);
+        }
+
+        // POST: Products/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+    }
+}
+

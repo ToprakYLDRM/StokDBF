@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Stokdbf.data.Models.Product>
+
+@{
+    ViewData["Title"] = "Ürün Listesi";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Ürün Listesi</h2>
+
+    <form asp-action="Index" method="get" class="row g-3 mb-4 align-items-end">
+        <div class="col-md-4">
+            <label for="search" class="form-label">Ürün Ara</label>
+            <input type="text" name="search" id="search" class="form-control" value="@ViewBag.CurrentSearch" placeholder="Ürün adı..." />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Kategori</label>
+            <select name="categoryId" class="form-select">
+                <option value="">Kategori Seç</option>
+                @foreach (var category in (SelectList)ViewBag.Categories)
+                {
+                    <option value="@category.Value" selected="@(ViewBag.CurrentCategory?.ToString() == category.Value ? "selected" : null)">
+                        @category.Text
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Sırala</label>
+            <select name="sortBy" class="form-select">
+                <option value="">Sırala</option>
+                <option value="name" selected="@(ViewBag.CurrentSort == "name" ? "selected" : null)">Ada göre</option>
+                <option value="price" selected="@(ViewBag.CurrentSort == "price" ? "selected" : null)">Fiyata göre</option>
+                <option value="stock" selected="@(ViewBag.CurrentSort == "stock" ? "selected" : null)">Stoka göre</option>
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+            <a asp-action="Index" class="btn btn-secondary w-100">Temizle</a>
+        </div>
+    </form>
+
+    <div class="mb-3 text-end">
+        <a asp-action="Create" class="btn btn-success">+ Yeni Ürün Ekle</a>
+    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Ad</th>
+                <th>Stok</th>
+                <th>Fiyat</th>

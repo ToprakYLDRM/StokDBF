@@ -1,0 +1,44 @@
+﻿@model Stokdbf.data.Models.StockMovement
+
+@{
+    ViewData["Title"] = "Yeni Stok Hareketi";
+    var products = ViewBag.Products as List<Stokdbf.data.Models.Product>;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label asp-for="ProductId" class="form-label">Ürün</label>
+            <select asp-for="ProductId" asp-items="@(new SelectList(products, "Id", "Name"))" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+            <span asp-validation-for="ProductId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MovementType" class="form-label">Hareket Türü</label>
+            <select asp-for="MovementType" class="form-select">
+                <option value="In">Giriş</option>
+                <option value="Out">Çıkış</option>
+            </select>
+            <span asp-validation-for="MovementType" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Quantity" class="form-label">Miktar</label>
+            <input asp-for="Quantity" type="number" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

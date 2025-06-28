@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Stokdbf.data.Models.StockMovement>
+
+@{
+    ViewData["Title"] = "Stok Hareketleri";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">@ViewData["Title"]</h2>
+        <a asp-action="Create" class="btn btn-success">+ Yeni Hareket</a>
+    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Ürün</th>
+                <th>Tip</th>
+                <th>Miktar</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Product?.Name</td>
+                    <td>@item.MovementType</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.MovementDate.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

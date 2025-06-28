@@ -1,0 +1,70 @@
+﻿@model Stokdbf.data.Models.Product
+
+@{
+    ViewData["Title"] = "Yeni Ürün Ekle";
+    var categories = ViewBag.Categories as List<Stokdbf.data.Models.Category>;
+    var suppliers = ViewBag.Suppliers as List<Stokdbf.data.Models.Supplier>;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    @* ModelState hatalarını özet olarak göster *@
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            Lütfen eksik veya hatalı alanları düzeltin.
+        </div>
+    }
+
+    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Ürün Adı</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Açıklama</label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Quantity" class="form-label">Stok Miktarı</label>
+            <input asp-for="Quantity" type="number" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UnitPrice" class="form-label">Birim Fiyat</label>
+            <input asp-for="UnitPrice" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="UnitPrice" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Kategori</label>
+            <select asp-for="CategoryId" asp-items="@(new SelectList(categories, "Id", "Name"))" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SupplierId" class="form-label">Tedarikçi</label>
+            <select asp-for="SupplierId" asp-items="@(new SelectList(suppliers, "Id", "Name"))" class="form-select">
+                <option value="">Seçiniz</option>
+            </select>
+            <span asp-validation-for="SupplierId" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a asp-action="Index" class="btn btn-secondary">İptal</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
